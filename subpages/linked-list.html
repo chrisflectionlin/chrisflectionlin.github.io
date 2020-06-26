@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>LeetCode</title><style>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Linked List</title><style>
 /* webkit printing magic: print all background colors */
 html {
 	-webkit-print-color-adjust: exact;
@@ -619,5 +619,258 @@ blockquote {
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
 }
 	
-</style></head><body><article id="8f80da15-3a04-417e-aeaf-e0e491d534c2" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/woodcuts_13.jpg" style="object-position:center 100%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">💻</span></div><h1 class="page-title">LeetCode</h1></header><div class="page-body"><h3 id="59f6a0e9-e71d-4fa0-8366-4adce8b34e51" class="">Data Structures</h3><ol id="69dc9770-22f6-4b88-a71f-9c8d8640aeca" class="numbered-list" start="1"><li><a href="subpages/binary-trees">Binary Trees</a></li></ol><ol id="8676e8f1-ffed-40f4-928b-6b48835160c6" class="numbered-list" start="2"><li><a href="subpages/linked-list">Linked List</a></li></ol><p id="8cca6cf8-4c46-40dd-96af-7fd0b239f5bc" class="">
-</p></div></article></body></html>
+</style></head><body><article id="8ef4e0a4-2765-4ec8-ac3f-0730ae68458e" class="page sans"><header><h1 class="page-title">Linked List</h1></header><div class="page-body"><hr id="03b344f9-d9a9-44bc-868c-d2cafb8404d4"/><p id="fab5e53f-665a-4b6c-b34c-fab3189dc0b9" class=""><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-list/">Remove Duplicates from Sorted List</a></p><pre id="18f69d5a-2ad0-4297-a820-615e8b84a358" class="code"><code>public ListNode deleteDuplicates(ListNode head) {
+        if(head == null) return head;
+        ListNode ans = head;
+        ListNode prev = head;
+        head = head.next;
+        while(head!=null){
+            if(head.val == prev.val){
+                prev.next = head.next;
+                head = head.next;
+            }else{
+                prev = head;
+                head = head.next;
+            }
+        }
+        return ans;
+}</code></pre><p id="7aac26f4-e81e-41f8-9189-33943386c92f" class=""><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/">Remove Duplicates from Sorted List II</a></p><pre id="29d6e48f-32f9-4894-8e02-0cb7341bb91e" class="code"><code>public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        head = dummy;
+        while(head.next != null &amp;&amp; head.next.next != null){
+            if(head.next.val == head.next.next.val){
+                int removed = head.next.val;
+                while(head.next != null &amp;&amp; head.next.val == removed){
+                    head.next = head.next.next;
+                }
+            }else{
+                head = head.next;
+            }
+        }
+        return dummy.next;
+}</code></pre><p id="8bedb5ad-df18-48e4-8c87-ccdd96f2964b" class=""><a href="https://leetcode.com/problems/reverse-linked-list/">Reverse Linked List</a></p><pre id="3718e9fe-2323-4af5-a4fc-d2814b933532" class="code"><code>public ListNode reverseList(ListNode head) {
+        if(head == null || head.next == null) return head;
+        ListNode prev = null;
+        ListNode cur = head;
+        while(cur != null){
+            ListNode tempNext = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = tempNext;
+        }
+        return prev;
+}</code></pre><p id="25b8d72d-343b-427c-8ee9-5e5bdff3ddb3" class=""><a href="https://leetcode.com/problems/reverse-linked-list-ii/">Reverse Linked List II</a></p><pre id="0e573ed7-8d63-4399-9d1f-095b973dafde" class="code"><code>public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode cur = dummy.next;
+        int i = 1;
+        //iter until cur is at position m
+        while(i&lt;m){
+            prev = cur;
+            cur = cur.next;
+            i++;
+        }
+        //keep a reference of the node previous the reverse
+        ListNode node = prev;
+        //reversing
+        while(i&lt;=n){
+            ListNode tempNext = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = tempNext;
+            i++;
+        }
+        //set the pointer
+        node.next.next = cur;
+        node.next = prev;
+        return dummy.next;
+}</code></pre><p id="f5055ee6-61bd-4465-adbf-d2dd519eaeb4" class=""><a href="https://leetcode.com/problems/merge-two-sorted-lists/">Merge Two Sorted Lists</a></p><pre id="7f860337-c332-4fba-91e0-fd8eaa21b428" class="code"><code>public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(0);
+        ListNode dummy = head;
+        while(l1 != null &amp;&amp; l2 != null){
+            if(l1.val &lt; l2.val){
+                head.next = l1;
+                l1 = l1.next;
+            }else{
+                head.next = l2;
+                l2 = l2.next;
+            }
+            head = head.next;
+        }
+        head.next = l1 == null? l2 : l1;
+        return dummy.next;
+}</code></pre><p id="3268eba4-457c-4ba1-b67b-a2d4df0eaf1f" class=""><a href="https://leetcode.com/problems/partition-list/">Partition List</a></p><pre id="08b9e5ce-ff54-46b6-96db-61ba9e3a2d9b" class="code"><code>public ListNode partition(ListNode head, int x) {
+        ListNode before = new ListNode();
+        ListNode before_head = before;
+        ListNode after = new ListNode();
+        ListNode after_head = after;
+        while(head!=null){
+            if(head.val &lt; x){
+                before.next = new ListNode(head.val);
+                before = before.next;
+            }else{
+                after.next = new ListNode(head.val);
+                after = after.next;
+            }
+            head = head.next;
+        }
+        after.next = null;
+        before.next = after_head.next;
+        return before_head.next;
+}</code></pre><p id="9d0f219b-5df9-47b5-b316-da71f9420322" class=""><a href="https://leetcode.com/problems/sort-list/">Sort List</a></p><pre id="ede96ac6-dafa-43dd-899e-9c5daf8cda41" class="code"><code>    public ListNode sortList(ListNode head) {
+        if(head == null || head.next == null) return head;
+        ListNode prev = head;
+        ListNode slow = head;
+        ListNode fast = head;
+        //seperate the list to two sections
+        while(fast != null &amp;&amp; fast.next != null){
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        //break the pointer
+        prev.next = null;
+        
+        //sort both left and right of the list
+        ListNode left = sortList(head);
+        ListNode right = sortList(slow);
+        
+        //merge two list
+        ListNode ans = mergeList(left,right);
+        return ans;
+    }
+    
+    public ListNode mergeList(ListNode l1, ListNode l2){
+        ListNode dummy = new ListNode();
+        ListNode head = dummy;
+        while(l1 != null &amp;&amp; l2 != null){
+            if(l1.val &lt; l2.val){
+                head.next = l1;
+                l1 = l1.next;
+            }else{
+                head.next = l2;
+                l2 = l2.next;
+            }
+            head = head.next;
+        }
+        head.next = l1 == null? l2 : l1;
+        return dummy.next;
+    }</code></pre><p id="cfe418fe-6eb5-46ba-acad-04a8cb7e307c" class=""><a href="https://leetcode.com/problems/reorder-list/">Reorder List</a></p><pre id="a855ff52-d429-44f2-b967-9282c38af7b6" class="code"><code>    public void reorderList(ListNode head) {
+        if(head == null) return;
+        
+        //seperate the process into 3 steps
+        
+        //1. find the middle point of the list
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast != null &amp;&amp; fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        //2. reverse the right side
+        ListNode right = reverse(slow.next);
+        //break the pointer
+        slow.next = null;
+        
+        
+        //3. combine two list together for the answer
+        while(head != null &amp;&amp; right != null){
+            ListNode temp_head_next = head.next;
+            ListNode temp_right_next = right.next;
+            right.next = head.next;
+            head.next = right;
+            head = temp_head_next;
+            right = temp_right_next;
+        }
+    }
+    
+    public ListNode reverse(ListNode head){
+        if(head == null || head.next == null) return head;
+        ListNode prev = null;
+        ListNode cur = head;
+        while(cur!=null){
+            ListNode tempNext = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = tempNext;
+        }
+        return prev;
+    }</code></pre><p id="f1fcdc7c-37d8-4a4e-8943-4e4c82096f81" class=""><a href="https://leetcode.com/problems/linked-list-cycle/">Linked List Cycle</a></p><pre id="8b19ebab-6870-4d25-a23c-d7c4c80d0675" class="code"><code>    public boolean hasCycle(ListNode head) {
+        if(head == null) return false;
+        ListNode fast = head.next;
+        ListNode slow = head;
+        while(fast != null &amp;&amp; fast.next != null){
+            if(fast.val == slow.val) return true;
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return false;
+    }</code></pre><p id="0a8903eb-74db-4059-aeb0-7236c76bd2f8" class=""><a href="https://leetcode.com/problems/linked-list-cycle-ii/">Linked List Cycle II</a></p><pre id="6f2e8d37-73c8-450e-9115-7060f76dfb57" class="code"><code>    public ListNode detectCycle(ListNode head) {
+        if(head == null) return head;
+        
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast != null &amp;&amp; fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(fast == slow){
+                fast = head;
+                while(fast != slow){
+                    fast = fast.next;
+                    slow = slow.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }</code></pre><p id="0809feaa-d221-4962-ba45-9acf8a24a104" class=""><a href="https://leetcode.com/problems/palindrome-linked-list/">Palindrome Linked List</a></p><pre id="118aa3f2-8242-40c7-b0fe-d171aaa7ed32" class="code"><code>    public boolean isPalindrome(ListNode head) {
+        if(head == null) return true;
+        ListNode fast = head;
+        ListNode slow = head;
+        //move the pointer to the middle
+        while(fast != null &amp;&amp; fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        //reverse the second half of the list
+        slow = reversed(slow);
+        fast = head;
+        //compare
+        while(slow!=null){
+            if(slow.val != fast.val) return false;
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return true;
+    }
+    
+    public ListNode reversed(ListNode head){
+        ListNode prev = null;
+        while(head != null){
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }</code></pre><p id="72f92a5c-4a95-4345-ba7b-76499188b14d" class=""><a href="https://leetcode.com/problems/copy-list-with-random-pointer/">Copy List with Random Pointer</a></p><pre id="ac948890-87ae-4cb8-842c-7ca79f3a4d46" class="code"><code>    public Node copyRandomList(Node head) {
+        if(head == null) return head;
+        Map&lt;Node,Node&gt; map = new HashMap&lt;&gt;();
+        Node node = head;
+        //go through the list and make the map
+        while(node != null){
+            map.put(node, new Node(node.val));
+            node = node.next;
+        }
+        node = head;
+        //go through the list again to assign next and random
+        while(node != null){
+            map.get(node).next = map.get(node.next);
+            map.get(node).random = map.get(node.random);
+            node = node.next;
+        }
+        return map.get(head);
+    }</code></pre></div></article></body></html>
